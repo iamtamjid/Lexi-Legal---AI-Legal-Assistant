@@ -1,0 +1,52 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section id="loginSection" class="auth-container">
+    <div class="auth-card">
+        <h2>Welcome Back</h2>
+        <p>Sign in to access your legal dashboard.</p>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn-primary" type="submit">
+                <i class="fas fa-sign-in-alt"></i> Secure Sign In
+            </button>
+        </form>
+        <p style="margin-top: 1.5rem; color: var(--text-secondary);">
+            Don't have an account? <a href="{% url 'register' %}" style="color: var(--primary-color);">Register here</a>
+        </p>
+    </div>
+</section>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} s
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section id="loginSection" class="auth-container">
+    <div class="auth-card">
+        <h2>Welcome Back</h2>
+        <p>Sign in to access your legal dashboard.</p>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn-primary" type="submit">
+                <i class="fas fa-sign-in-alt"></i> Secure Sign In
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}  
+s {% endcomment %}

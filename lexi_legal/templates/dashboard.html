@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section id="dashboardSection" class="dashboard-container">
+    <div id="welcomeBanner">
+        <h2>Hello, {{ user.username }}!</h2>
+        <p>Your intelligent legal dashboard is ready.</p>
+    </div>
+    <div class="dashboard-grid">
+        <a href="{% url 'add_client' %}" class="dashboard-card">
+            <i class="fas fa-user-plus icon-feature"></i>
+            <h3>Add New Client</h3>
+            <p>Create a new client profile and upload initial documents.</p>
+        </a>
+        <a href="{% url 'existing_clients' %}" class="dashboard-card">
+            <i class="fas fa-users icon-feature"></i>
+            <h3>Manage Clients</h3>
+            <p>View, edit, and manage all your existing client files.</p>
+        </a>
+        <a href="{% url 'all_files' %}" class="dashboard-card">
+            <i class="fas fa-folder-open icon-feature"></i>
+            <h3>All Documents</h3>
+            <p>Browse and search all documents across all clients.</p>
+        </a>
+    </div>
+</section>
+{% endblock %}

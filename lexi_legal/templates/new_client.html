@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section id="newClientSection" class="page-container">
+    <div class="page-header">
+        <h2><i class="fas fa-user-plus"></i> Create New Client</h2>
+        <a href="{% url 'dashboard' %}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+    <div class="form-card">
+        <form method="post" enctype="multipart/form-data" id="clientForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="clientNameInput">Client Full Name</label>
+                <input type="text" id="clientNameInput" name="client_name" placeholder="e.g., John Doe" required />
+            </div>
+            <div class="form-group">
+                <label>Upload Case Documents (Images)</label>
+                <div class="file-drop-zone" id="fileDropZone">
+                    <input type="file" id="clientFileInput" name="files" accept="image/*" multiple required />
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & drop image files here, or click to browse.</p>
+                    <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">
+                        Supported formats: JPG, PNG, GIF, WebP
+                    </small>
+                </div>
+                <div id="filePreview" class="file-preview-container hidden"></div>
+            </div>
+            <button class="btn-primary" type="submit" id="submitBtn">
+                <i class="fas fa-paper-plane"></i> Process & Create Client
+            </button>
+        </form>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('clientFileInput');
+    const filePreview = document.getElementById('filePreview');
+    const fileDropZone = document.getElementById('fileDropZone');
+    const form = document.getElementById('clientForm');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    let selectedFiles = [];
+    
+    // File input change handler
+    fileInput.addEventListener('change', function(e) {
+        handleFiles(Array.from(e.target.files));
+    });
+    
+    // Drag and drop handlers
+    fileDropZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        fileDropZone.style.borderColor = 'var(--primary-color)';
+        fileDropZone.style.backgroundColor = '#dbeafe';
+    });
+    
+    fileDropZone.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        fileDropZone.style.borderColor = 'var(--border-color)';
+        fileDropZone.style.backgroundColor = 'var(--bg-color)';
+    });
+    
+    fileDropZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        fileDropZone.style.borderColor = 'var(--border-color)';
+        fileDropZone.style.backgroundColor = 'var(--bg-color)';
+        
+        const files = Array.from(e.dataTransfer.files).filter(file => 
+            file.type.startsWith('image/')
+        );
+        
+        if (files.length > 0) {
+            handleFiles(files);
+        } else {
+            alert('Please drop only image files.');
+        }
+    });
+    
+    function handleFiles(files) {
+        selectedFiles = files;
+        displayFilePreview(files);
+    }
+    
+    function displayFilePreview(files) {
+        filePreview.innerHTML = '';
+        
+        if (files.length === 0) {
+            filePreview.classList.add('hidden');
+            return;
+        }
+        
+        filePreview.classList.remove('hidden');
+        
+        files.forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-preview-item';
+            
+            const fileSize = (file.size / 1024).toFixed(1) + ' KB';
+            
+            fileItem.innerHTML = `
+                <i class="fas fa-file-image"></i>
+                <span class="file-preview-name">${file.name}</span>
+                <span class="file-preview-size">${fileSize}</span>
+                <button type="button" class="file-remove-btn" onclick="removeFile(${index})" style="
+                    background: none; 
+                    border: none; 
+                    color: var(--danger-color); 
+                    margin-left: 0.5rem; 
+                    cursor: pointer;
+                ">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            filePreview.appendChild(fileItem);
+        });
+    }
+    
+    window.removeFile = function(index) {
+        selectedFiles.splice(index, 1);
+        displayFilePreview(selectedFiles);
+        updateFileInput();
+    };
+    
+    function updateFileInput() {
+        // Create new file list
+        const dt = new DataTransfer();
+        selectedFiles.forEach(file => dt.items.add(file));
+        fileInput.files = dt.files;
+    }
+    
+    // Form submission handler
+    form.addEventListener('submit', function(e) {
+        const clientName = document.getElementById('clientNameInput').value.trim();
+        
+        if (!clientName) {
+            e.preventDefault();
+            alert('Please enter a client name.');
+            return;
+        }
+        
+        if (selectedFiles.length === 0) {
+            e.preventDefault();
+            alert('Please select at least one image file.');
+            return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<div class="spinner"></div> Processing...';
+        
+        // Update file input with selected files
+        updateFileInput();
+    });
+});
+</script>
+
+<style>
+.file-preview-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--secondary-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+}
+
+.file-preview-item i {
+    margin-right: 0.75rem;
+    color: var(--primary-color);
+}
+
+.file-preview-name {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.875rem;
+}
+
+.file-preview-size {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-right: 0.5rem;
+}
+
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+{% endblock %}

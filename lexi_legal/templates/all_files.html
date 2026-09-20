@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section id="allFilesSection" class="page-container">
+    <div class="page-header">
+        <h2><i class="fas fa-folder-open"></i> All Client Documents</h2>
+        <a href="{% url 'dashboard' %}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+    <div id="allFilesList">
+        {% if files %}
+            {% for file in files %}
+            <div class="file-item">
+                <i class="fas fa-file-alt file-icon"></i>
+                <div class="file-info">
+                    <div class="file-client">{{ file.client.full_name }}</div>
+                    <div class="file-name">{{ file.name }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="padding: 1.5rem;">No files available yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
