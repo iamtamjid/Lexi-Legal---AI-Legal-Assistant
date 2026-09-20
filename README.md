@@ -379,4 +379,4 @@ Copyright (c) Tamjid.
 
 ## Author
 
-**Created by Tamjid**
+**Tamjid**
