@@ -8,7 +8,7 @@
 
 Lexi Legal is a Django web application that ingests images of case documents, sends them to Google's Gemini multimodal API to extract printed and handwritten text, and generates a concise legal summary for each file. Results are stored per client in a user-scoped workspace. Paper-based case material becomes reviewable, searchable text without manual transcription.
 
-**Contents:** [Key Features](#key-features) · [Tech Stack](#tech-stack) · [Architecture](#architecture) · [Getting Started](#getting-started) · [Usage Guide](#usage-guide) · [Configuration](#configuration--environment-variables) · [Security & Privacy](#security--privacy) · [Roadmap](#roadmap) · [Contributing](#contributing) · [License](#license)
+**Contents:** [Key Features](#key-features) · [Tech Stack](#tech-stack) · [Architecture](#architecture) · [Getting Started](#getting-started) · [Usage Guide](#usage-guide) · [Configuration](#configuration--environment-variables) · [Security & Privacy](#security--privacy) · [Roadmap](#roadmap) · [Contributing](#contributing) · [License](#license) · [Author](#author)
 
 ---
 
@@ -371,6 +371,12 @@ Do not include secrets, uploaded documents, databases, or virtual environments i
 
 Distributed under the MIT License. See [`LICENSE`](LICENSE) for details.
 
+Copyright (c) Tamjid.
+
 ## Acknowledgements
 
 [Django](https://www.djangoproject.com/), the [Google Gemini API](https://ai.google.dev/), [Font Awesome](https://fontawesome.com/), and [Inter](https://rsms.me/inter/).
+
+## Author
+
+**Created by Tamjid**
